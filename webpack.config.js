@@ -10,6 +10,9 @@ module.exports = {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 9000,
+    historyApiFallback: {
+      rewrites: [{ from: /^\/$/, to: "/index.html" }],
+    },
   },
   entry: {
     app: "./src/index.tsx",
@@ -29,7 +32,6 @@ module.exports = {
           },
         ],
       },
-      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       {
         enforce: "pre",
         test: /\.js$/,
