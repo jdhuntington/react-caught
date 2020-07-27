@@ -17,9 +17,34 @@ export const ExplicitState: React.FC<{}> = (props) => {
         <dd>
           <DumbComponentWithSimpleStateManagement />
         </dd>
+        <dt>
+          <pre>DumbComponentWithCustomHook</pre>
+        </dt>
+        <dd>
+          <DumbComponentWithCustomHook step={1} />
+        </dd>
+        <dt>
+          <pre>DumbComponentWithCustomHook</pre>
+        </dt>
+        <dd>
+          <DumbComponentWithCustomHook step={42} />
+        </dd>
       </dl>
     </>
   );
+};
+
+const useIncrementor = (initial: number, step: number) => {
+  const [val, setVal] = React.useState(initial);
+  const increment = React.useCallback(() => {
+    setVal(val + step);
+  }, [val, setVal, step]);
+  return { val, increment };
+};
+
+const DumbComponentWithCustomHook: React.FC<{ step: number }> = (props) => {
+  const { val, increment } = useIncrementor(0, props.step);
+  return <DumbComponent myValue={val} onIncrement={increment} />;
 };
 
 const DumbComponentWithSimpleStateManagement: React.FC<{}> = (props) => {
