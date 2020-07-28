@@ -7,15 +7,32 @@ export const Chainable: React.FC<{}> = (props) => {
       <h2>ChainableState</h2>
       <div>Chainable state management</div>
       <ChainableState />
+      <ChainedInc/>
     </>
   );
 };
 
 const IncState = (s: number): [number, number] => {
-  return [s * 2, s + 1];
+  return [s, s + 1];
 };
 
+interface Foo {
+  onChange: (newCount: number) => void;
+}
+
+const RenderIncremental = (cur: number) => (n: number): [(p: Foo)=> JSX.Element, number] => {
+  const inc = (props: Foo) => {
+    return NoState({value: `count is ${cur}`, onIncrement:()=> props.onChange(n)});
+  }
+  return [inc, n];
+}
+
 const Inc = State(IncState);
+
+// For rendering an incremental that handles most of the changes
+const IncEle = Inc.bind((n)=> {
+  return State(RenderIncremental(n));
+})
 
 const ChainableState: React.FC<{}> = (props) => {
   const [myValue, setMyValue] = React.useState(0);
@@ -25,7 +42,13 @@ const ChainableState: React.FC<{}> = (props) => {
   return <NoState value={myValue} onIncrement={incrementCallback} />;
 };
 
-const NoState: React.FC<{ value: number; onIncrement: () => void }> = (
+const ChainedInc: React.FC<{}> = (props) => {
+  const [myValue, setMyValue] = React.useState(0);
+  const R = IncEle.runValue(myValue);
+  return <R onChange={(n)=> setMyValue(n)}/>
+}
+
+const NoState: React.FC<{ value: number | string; onIncrement: () => void }> = (
   props
 ) => {
   return <button onClick={props.onIncrement}>{props.value}</button>;
