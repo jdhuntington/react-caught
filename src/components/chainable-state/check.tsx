@@ -1,5 +1,5 @@
 import * as React from "react";
-import { State } from "../../monads/state";
+import {ReactState} from '../../monads/rState';
 
 export interface CheckBoxView {
   text: string;
@@ -37,7 +37,7 @@ export const StateCheckbox: React.FC<CheckboxProps> = (props) => {
   );
 };
 
-const checkedState = State((props: CheckboxProps): [
+const checkedState = ReactState((props: CheckboxProps): [
   CheckBoxView,
   CheckboxProps
 ] => {
@@ -49,11 +49,5 @@ const checkedState = State((props: CheckboxProps): [
   return [{ text: props.text, onChange: onChange, checked: state }, props];
 });
 
-const getCheckHandler = (
-  s: CheckboxProps,
-  v: CheckBoxView
-): [JSX.Element, CheckboxProps] => {
-  return [<Checkbox {...v}></Checkbox>, s];
-};
 
-export const Foo = checkedState.combinedBind(getCheckHandler);
+export const StatefulCheckbox = checkedState.bindRender(Checkbox);

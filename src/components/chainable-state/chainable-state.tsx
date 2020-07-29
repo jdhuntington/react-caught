@@ -1,5 +1,5 @@
 import { State } from "../../monads/state";
-import { Foo, StateCheckbox } from "./check";
+import { StatefulCheckbox, StateCheckbox } from "./check";
 import * as React from "react";
 
 export const Chainable: React.FC<{}> = (props) => {
@@ -10,7 +10,7 @@ export const Chainable: React.FC<{}> = (props) => {
       <ChainableState />
       <ChainedInc />
       <StateCheckbox text="asdf" onChange={() => {}}></StateCheckbox>
-      <Foo.runValue text="Foooo" onChange={() => {}} />
+      <StatefulCheckbox.render text="Foooo" onChange={() => {}} />
     </>
   );
 };
