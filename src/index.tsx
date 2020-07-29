@@ -3,6 +3,7 @@ import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { ExplicitState } from "./components/explicit-state/explicit-state";
 import { Chainable } from "./components/chainable-state/chainable-state";
+import { DumbButtons } from "./components/dumb-buttons/dumb-buttons";
 
 const App: React.FC<{}> = (props) => {
   return (
@@ -19,6 +20,9 @@ const App: React.FC<{}> = (props) => {
             <li>
               <Link to="/chain">Chainable state</Link>
             </li>
+            <li>
+              <Link to="/DB">Dumb Buttons</Link>
+            </li>
           </ul>
         </nav>
         <Switch>
@@ -28,6 +32,9 @@ const App: React.FC<{}> = (props) => {
 
           <Route path="/chain">
             <Chainable />
+          </Route>
+          <Route path="/DB">
+            <DumbButtons />
           </Route>
           <Route path="/">
             <h2>Click a link.</h2>

@@ -1,14 +1,15 @@
-import {StateFunction, DStateF} from './state';
-import * as React from 'react'
+import { StateFunction, DStateF } from "./state";
+import * as React from "react";
 
 export class ReactMonad<Props, R> {
-
   private _sfn: StateFunction<Props, R>;
   // private _state: S
   public constructor(sfn: StateFunction<Props, R>) {
     this._sfn = sfn;
   }
-  public bind: <N>(fn: (v: R) => ReactMonad<Props, N>) => ReactMonad<Props, N> = (fn) => {
+  public bind: <N>(
+    fn: (v: R) => ReactMonad<Props, N>
+  ) => ReactMonad<Props, N> = (fn) => {
     return new ReactMonad((s: Props) => {
       const [v, ns] = this.runFN(s);
       return fn(v).runFN(ns);
@@ -17,15 +18,17 @@ export class ReactMonad<Props, R> {
 
   public render = (props: Props) => {
     return this.runValue(props);
-  }
+  };
 
   public bindRender: (
     Rnd: (p: R) => JSX.Element
-  ) => ReactMonad<Props, JSX.Element>  = (Rnd) => {
+  ) => ReactMonad<Props, JSX.Element> = (Rnd) => {
     return this.combinedBind((s: Props, p: R) => [<Rnd {...p} />, s]);
-  }
+  };
 
-  public combinedBind: <N>(fn: DStateF<Props, R, N>) => ReactMonad<Props, N> = (fn) => {
+  public combinedBind: <N>(fn: DStateF<Props, R, N>) => ReactMonad<Props, N> = (
+    fn
+  ) => {
     return this.bind((v) => new ReactMonad((s) => fn(s, v)));
   };
 
@@ -42,6 +45,6 @@ export class ReactMonad<Props, R> {
 //   return (s:V, p:P) => [<Rnd {...p} />, s ]
 // }
 
-export function ReactState<S, R>(sfn: StateFunction<S, R>){
+export function ReactState<S, R>(sfn: StateFunction<S, R>) {
   return new ReactMonad<S, R>(sfn);
 }
