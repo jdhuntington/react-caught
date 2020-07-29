@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ReactState} from '../../monads/rState';
+import { ReactState } from "../../monads/rState";
 
 export interface CheckBoxView {
   text: string;
@@ -48,6 +48,5 @@ const checkedState = ReactState((props: CheckboxProps): [
   }, [state, update]);
   return [{ text: props.text, onChange: onChange, checked: state }, props];
 });
-
 
 export const StatefulCheckbox = checkedState.bindRender(Checkbox);
